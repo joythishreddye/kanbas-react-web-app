@@ -8,7 +8,6 @@ export default function AssignmentEditor() {
                 <input type="text" id="assignment-name" className="form-control" value="A1"/>
             </div>
 
-
             <div className="form-group row mb-3">
                 <textarea id="wd-description" className="form-control" rows={10} defaultValue={`The assignment is available online.
 Submit a link to the landing page of your Web application running on Netlify.
