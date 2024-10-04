@@ -33,8 +33,10 @@ The Kanbas application should include a link to navigate back to the landing pag
                 <label htmlFor="assignment-group" className="col-md-3">Assignment
                     Group</label>
                 <div className="col-md-9">
-                    <select id="assignment-group" className="form-control">
+                    <select id="assignment-group" className="form-select">
                         <option value="assignments">ASSIGNMENTS</option>
+                        <option value="assignments">QUIZZES</option>
+                        <option value="assignments">PROJECTS</option>
                     </select>
                 </div>
             </div>
@@ -42,8 +44,9 @@ The Kanbas application should include a link to navigate back to the landing pag
             <div className="form-group row mb-3">
                 <label htmlFor="display-grade" className="col-md-3">Display Grade as</label>
                 <div className="col-md-9">
-                    <select id="display-grade" className="form-control">
+                    <select id="display-grade" className="form-select">
                         <option value="percentage">Percentage</option>
+                        <option value="percentage">Score</option>
                     </select>
                 </div>
             </div>
@@ -52,7 +55,7 @@ The Kanbas application should include a link to navigate back to the landing pag
                 <label htmlFor="submission-type" className="col-md-3">Submission
                     Type</label>
                 <div className="col-md-9 border p-2">
-                    <select id="submission-type" className="form-control">
+                    <select id="submission-type" className="form-select">
                         <option value="online">Online</option>
                         <option value="offline">Offline</option>
                     </select>
@@ -100,13 +103,15 @@ The Kanbas application should include a link to navigate back to the landing pag
                 <label htmlFor="assign" className="col-md-3">Assign</label>
                 <div className="col-md-9 border p-2">
                     <div className="row mb-3">
-                        <div className="col-md-6">
+                        <div className="col-md-12">
                             <label htmlFor="assign-to" className="fw-bold">Assign To</label>
-                            <select id="assign-to" className="form-control">
+                            <select id="assign-to" className="form-select">
                                 <option value="everyone">Everyone</option>
                             </select>
                         </div>
-                        <div className="col-md-6">
+                    </div>
+                    <div className="row mb-3">
+                        <div className="col-md-12">
                             <label htmlFor="due-date" className="fw-bold">Due</label>
                             <input id="due-date" type="date" className="form-control"
                                    value="2024-05-13"/>

@@ -1,7 +1,9 @@
-import {FaPlus, FaGripVertical, FaEllipsisV} from "react-icons/fa";
+import {FaPlus, FaEllipsisV} from "react-icons/fa";
 import {AiOutlineFileText} from "react-icons/ai";
 import {RiSearchLine} from "react-icons/ri";
 import LessonControlButtons from "../Modules/LessonControlButtons";
+import {BsGripVertical, BsPlus} from "react-icons/bs";
+import {IoEllipsisVertical} from "react-icons/io5";
 
 export default function Assignments() {
     return (
@@ -24,37 +26,37 @@ export default function Assignments() {
                         <button
                             id="wd-add-assignment-group"
                             className="btn btn-outline-secondary me-2">
-                            <FaPlus className="me-2"/>
+                            <BsPlus className="fs-2"/>
                             Group
                         </button>
                         <button
                             id="wd-add-assignment"
                             className="btn btn-danger">
-                            <FaPlus className="me-2"/>
+                            <BsPlus className="fs-2"/>
                             Assignment
                         </button>
                     </div>
                 </div>
 
-                <div className="bg-light p-3">
+                <div className="bg-light p-3 border border-dark">
                     <h3 className="mb-0">
-                        <FaGripVertical className="me-2"/>
+                        <BsGripVertical className="me-2 fs-1"/>
                         ASSIGNMENTS
                         <div className="float-end">
-                            <button className="btn btn-outline-secondary me-2">
+                            <button className="btn btn-outline-secondary rounded-pill me-2">
                                 40% of Total
                             </button>
-                            <FaPlus className="fs-4"/>
-                            <FaEllipsisV className="fs-4"/>
+                            <BsPlus className="fs-2"/>
+                            <IoEllipsisVertical className="fs-4"/>
                         </div>
                     </h3>
                 </div>
 
                 <ul id="wd-assignment-list" className="list-group rounded-0">
-                    <li className="wd-assignment-list-item list-group-item p-3 ps-2 border-bottom d-flex align-items-start">
+                    <li className="wd-assignment-list-item list-group-item p-3 ps-2 border-bottom d-flex align-items-start align-items-center">
                         <div className="me-3">
-                            <FaGripVertical className="me-2"/>
-                            <AiOutlineFileText className="text-success"/>
+                            <BsGripVertical className="me-1 large-icon"/>
+                            <AiOutlineFileText className="text-success large-icon"/>
                         </div>
                         <div className="flex-grow-1">
                             <div className="d-flex justify-content-between">
@@ -65,7 +67,7 @@ export default function Assignments() {
                                 <LessonControlButtons/>
                             </div>
                             <p>
-                                <span className="red">Multiple Modules</span> |{" "}
+                            <span className="red">Multiple Modules</span> |{" "}
                                 <strong>Not available until</strong> May 6 at 12.00 am |
                             </p>
                             <p>
@@ -74,10 +76,10 @@ export default function Assignments() {
                         </div>
                     </li>
 
-                    <li className="wd-assignment-list-item list-group-item p-3 ps-2 border-bottom d-flex align-items-start">
+                    <li className="wd-assignment-list-item list-group-item p-3 ps-2 border-bottom d-flex align-items-start align-items-center">
                         <div className="me-3">
-                            <FaGripVertical className="me-2"/>
-                            <AiOutlineFileText className="text-success"/>
+                            <BsGripVertical className="me-1 large-icon"/>
+                            <AiOutlineFileText className="text-success large-icon"/>
                         </div>
                         <div className="flex-grow-1">
 
@@ -90,7 +92,7 @@ export default function Assignments() {
                             </div>
                             <p>
                                 <span className="red">Multiple Modules</span> |{" "}
-                                <strong>Not available until</strong> May 13 at 12.00 am
+                                <strong>Not available until</strong> May 13 at 12.00 am |
                             </p>
                             <p>
                                 <strong>Due</strong> May 20 at 11:59 pm | 100 pts
@@ -98,10 +100,10 @@ export default function Assignments() {
                         </div>
                     </li>
 
-                    <li className="wd-assignment-list-item list-group-item p-3 ps-2 border-bottom d-flex align-items-start">
+                    <li className="wd-assignment-list-item list-group-item p-3 ps-2 border-bottom d-flex align-items-start align-items-center">
                         <div className="me-3">
-                            <FaGripVertical className="me-2"/>
-                            <AiOutlineFileText className="text-success"/>
+                            <BsGripVertical className="me-1 large-icon"/>
+                            <AiOutlineFileText className="text-success large-icon"/>
                         </div>
                         <div className="flex-grow-1">
                             <div className="d-flex justify-content-between">
@@ -113,7 +115,7 @@ export default function Assignments() {
                             </div>
                             <p>
                                 <span className="red">Multiple Modules</span> |{" "}
-                                <strong>Not available until</strong> May 20 at 12.00 am
+                                <strong>Not available until</strong> May 20 at 12.00 am |
                             </p>
                             <p>
                                 <strong>Due</strong> May 27 at 11:59 pm | 100 pts

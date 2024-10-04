@@ -50,6 +50,7 @@ body * {
     font-weight: bold;
     text-decoration: none;
     color: black;
+    font-size: 1.2rem;
 }
 
 .red {
@@ -68,3 +69,6 @@ body * {
     margin-bottom: 0;
 }
 
+.large-icon {
+    font-size: 1.5rem;
+}

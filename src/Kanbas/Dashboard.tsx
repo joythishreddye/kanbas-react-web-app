@@ -9,7 +9,7 @@ export default function Dashboard() {
             <hr/>
             <div id="wd-dashboard-courses" className="row">
                 <div className="row row-cols-1 row-cols-md-5 g-4">
-                    <div className="wd-dashboard-course col" style={{width: "300px"}}>
+                    <div className="wd-dashboard-course col" style={{width: "290px"}}>
                         <div className="card rounded-3 overflow-hidden">
                             <Link
                                 className="wd-dashboard-course-link text-decoration-none text-dark"
@@ -29,7 +29,7 @@ export default function Dashboard() {
                         </div>
                     </div>
 
-                    <div className="wd-dashboard-course col" style={{width: "300px"}}>
+                    <div className="wd-dashboard-course col" style={{width: "290px"}}>
                         <div className="card rounded-3 overflow-hidden">
                             <Link
                                 className="wd-dashboard-course-link text-decoration-none text-dark"
@@ -48,7 +48,7 @@ export default function Dashboard() {
                         </div>
                     </div>
 
-                    <div className="wd-dashboard-course col" style={{width: "300px"}}>
+                    <div className="wd-dashboard-course col" style={{width: "290px"}}>
                         <div className="card rounded-3 overflow-hidden">
                             <Link
                                 className="wd-dashboard-course-link text-decoration-none text-dark"
@@ -65,7 +65,7 @@ export default function Dashboard() {
                         </div>
                     </div>
 
-                    <div className="wd-dashboard-course col" style={{width: "300px"}}>
+                    <div className="wd-dashboard-course col" style={{width: "290px"}}>
                         <div className="card rounded-3 overflow-hidden">
                             <Link
                                 className="wd-dashboard-course-link text-decoration-none text-dark"
@@ -82,7 +82,7 @@ export default function Dashboard() {
                         </div>
                     </div>
 
-                    <div className="wd-dashboard-course col" style={{width: "300px"}}>
+                    <div className="wd-dashboard-course col" style={{width: "290px"}}>
                         <div className="card rounded-3 overflow-hidden">
                             <Link
                                 className="wd-dashboard-course-link text-decoration-none text-dark"
@@ -99,7 +99,7 @@ export default function Dashboard() {
                         </div>
                     </div>
 
-                    <div className="wd-dashboard-course col" style={{width: "300px"}}>
+                    <div className="wd-dashboard-course col" style={{width: "290px"}}>
                         <div className="card rounded-3 overflow-hidden">
                             <Link
                                 className="wd-dashboard-course-link text-decoration-none text-dark"
@@ -107,7 +107,7 @@ export default function Dashboard() {
                                 <img alt="ML" src="/images/ml.jpg" width="100%" height={160}/>
                                 <div className="card-body">
                                     <h5 className="wd-dashboard-course-title card-title">
-                                        CS1239 Machine Learning</h5>
+                                        CS1239 ML</h5>
                                     <p className="wd-dashboard-course-title card-text">ML
                                         Engineer</p>
                                     <button className="btn btn-primary">Go</button>
@@ -116,7 +116,7 @@ export default function Dashboard() {
                         </div>
                     </div>
 
-                    <div className="wd-dashboard-course col" style={{width: "300px"}}>
+                    <div className="wd-dashboard-course col" style={{width: "290px"}}>
                         <div className="card rounded-3 overflow-hidden">
                             <Link
                                 className="wd-dashboard-course-link text-decoration-none text-dark"
@@ -124,7 +124,7 @@ export default function Dashboard() {
                                 <img alt="ML" src="/images/cs.jpg" width="100%" height={160}/>
                                 <div className="card-body">
                                     <h5 className="wd-dashboard-course-title card-title">
-                                        CS1240 Computer System</h5>
+                                        CS1240 Networks</h5>
                                     <p className="wd-dashboard-course-title card-text">Networking
                                         Engineer</p>
                                     <button className="btn btn-primary">Go</button>
