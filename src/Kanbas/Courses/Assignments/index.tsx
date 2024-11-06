@@ -4,42 +4,33 @@ import LessonControlButtons from "../Modules/LessonControlButtons";
 import {BsGripVertical, BsPlus} from "react-icons/bs";
 import {IoEllipsisVertical} from "react-icons/io5";
 import {useParams} from "react-router";
-import * as db from "../../Database";
+import {deleteAssignment} from "./reducer";
+import {useDispatch, useSelector} from "react-redux";
+import {FaPlus} from "react-icons/fa6";
+import {Link} from "react-router-dom";
+import {FaTrash} from "react-icons/fa";
+import Faculty from "../Faculty";
 
 export default function Assignments() {
     const {cid} = useParams();
-    const courseAssignments = db.assignments.filter((assignment) => assignment.course === cid);
+    const dispatch = useDispatch();
+    const {assignments} = useSelector((state: any) => state.assignmentsReducer);
+    const {currentUser} = useSelector((state: any) => state.accountReducer);
 
-    function formatDate(inputDate: string | number | Date) {
-        const dateOptions: Intl.DateTimeFormatOptions = { month: "short", day: "numeric" };
-        const dateInstance = new Date(inputDate);
-
-        const formattedTime = dateInstance
-            .toLocaleTimeString("en-US", {
-                hour: "2-digit",
-                minute: "2-digit",
-                hour12: true
-            })
-            .toLowerCase();
-
-        const formattedDate = dateInstance.toLocaleDateString("en-US", dateOptions);
-
-        return `${formattedDate} at ${formattedTime}`;
-    }
+    const handleDelete = (assignmentId: string) => {
+        if (window.confirm("Are you sure you want to remove this assignment?")) {
+            dispatch(deleteAssignment(assignmentId));
+        }
+    };
 
     return (
         <div id="wd-assignments">
             <div className="container mt-4">
                 <div className="d-flex justify-content-between align-items-center mb-3">
                     <div className="position-relative">
-                        <span>
-                            <RiSearchLine className="search-icon"/>
-                        </span>
-                        <input
-                            id="wd-search-assignment"
-                            className="form-control"
-                            placeholder="Search..."
-                            style={{paddingLeft: "30px"}}
+                        <span><RiSearchLine className="search-icon"/></span>
+                        <input id="wd-search-assignment" className="form-control"
+                               placeholder="Search..." style={{paddingLeft: "30px"}}
                         />
                     </div>
 
@@ -49,10 +40,11 @@ export default function Assignments() {
                             <BsPlus className="fs-2"/>
                             Group
                         </button>
-                        <button id="wd-add-assignment" className="btn btn-danger">
-                            <BsPlus className="fs-2"/>
-                            Assignment
-                        </button>
+                        <Link to={`/Kanbas/Courses/${cid}/Assignments/New`}
+                              className="btn btn-lg btn-danger me-1 float-end"
+                        >
+                            <FaPlus className="me-2 fs-5"/> Assignment
+                        </Link>
                     </div>
                 </div>
 
@@ -71,12 +63,12 @@ export default function Assignments() {
                 </div>
 
                 <ul id="wd-assignment-list" className="list-group rounded-0">
-                    {courseAssignments.length === 0 ? (
+                    {assignments.length === 0 ? (
                         <li className="list-group-item p-3">
                             There are no assignments available for this course.
                         </li>
                     ) : (
-                        courseAssignments.map((assignment) => (
+                        assignments.filter((assignment: any) => assignment.course === cid).map((assignment: any) => (
                             <li
                                 key={assignment._id}
                                 className="wd-assignment-list-item list-group-item p-3 ps-2 border-bottom d-flex align-items-start align-items-center"
@@ -86,22 +78,40 @@ export default function Assignments() {
                                     <AiOutlineFileText className="text-success large-icon"/>
                                 </div>
                                 <div className="flex-grow-1">
-                                    <div className="d-flex justify-content-between">
-                                        <a
-                                            className="wd-assignment-link"
-                                            href={`#/Kanbas/Courses/${cid}/Assignments/${assignment._id}`}
-                                        >
-                                            {assignment.title}
-                                        </a>
-                                        <LessonControlButtons/>
+                                    <div
+                                        className="d-flex justify-content-between align-items-center">
+                                        <div>
+                                            {currentUser.role === "FACULTY" ||
+                                            currentUser.role === "ADMIN" ? (
+                                                <a
+                                                    className="wd-assignment-link text-black"
+                                                    href={`#/Kanbas/Courses/${cid}/Assignments/${assignment._id}`}
+                                                >
+                                                    {assignment.title}
+                                                </a>
+                                            ) : (
+                                                <span className="wd-assignment-title text-black">
+                                                    {assignment.title}
+                                                </span>
+                                            )}
+                                        </div>
+                                        <div className="d-flex align-items-center">
+                                            <Faculty>
+                                                <FaTrash className="text-danger me-3"
+                                                         style={{cursor: "pointer"}}
+                                                         onClick={() => handleDelete(assignment._id)}
+                                                />
+                                            </Faculty>
+                                            <LessonControlButtons/>
+                                        </div>
                                     </div>
                                     <p>
                                         <span className="red">Multiple Modules</span> |{" "}
                                         <strong>Not available until</strong>{" "}
-                                        {formatDate(assignment.available)}
+                                        {assignment.availableFrom}
                                     </p>
                                     <p>
-                                        <strong>Due</strong> {formatDate(assignment.due)} | {assignment.points} pts
+                                        <strong>Due</strong> {assignment.availableUntil} | {assignment.points} pts
                                     </p>
                                 </div>
                             </li>
