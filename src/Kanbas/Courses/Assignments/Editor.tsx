@@ -18,9 +18,9 @@ export default function AssignmentEditor() {
     const [assignmentName, setAssignmentName] = useState(assignments.title);
     const [description, setDescription] = useState(assignments.description);
     const [points, setPoints] = useState(assignments.points);
-    const [dueDate, setDueDate] = useState(formatDateForInput(assignments.dueDate));
-    const [availableFrom, setAvailableFrom] = useState(formatDateForInput(assignments.availableFrom));
-    const [availableUntil, setAvailableUntil] = useState(formatDateForInput(assignments.availableUntil));
+    const [dueDate, setDueDate] = useState(assignments.dueDate);
+    const [availableFrom, setAvailableFrom] = useState(assignments.availableFrom);
+    const [availableUntil, setAvailableUntil] = useState(assignments.availableUntil);
 
     if (!assignments) {
         return <div>Assignment not found</div>;
@@ -34,15 +34,6 @@ export default function AssignmentEditor() {
         );
         navigate(`/Kanbas/Courses/${cid}/Assignments`);
     };
-
-    function formatDateForInput(inputDate: string | number | Date | undefined) {
-        if (!inputDate) return "";
-
-        const formattedDate = new Date(inputDate);
-        const isoString = formattedDate.toISOString();
-
-        return `${isoString.split('T')[0]}`;
-    }
 
     return (
         <div id="wd-assignments-editor" className="container mt-5" style={{maxWidth: '700px'}}>

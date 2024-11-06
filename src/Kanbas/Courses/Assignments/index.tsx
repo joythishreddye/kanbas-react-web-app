@@ -34,18 +34,20 @@ export default function Assignments() {
                         />
                     </div>
 
-                    <div>
-                        <button id="wd-add-assignment-group"
-                                className="btn btn-outline-secondary me-2">
-                            <BsPlus className="fs-2"/>
-                            Group
-                        </button>
-                        <Link to={`/Kanbas/Courses/${cid}/Assignments/New`}
-                              className="btn btn-lg btn-danger me-1 float-end"
-                        >
-                            <FaPlus className="me-2 fs-5"/> Assignment
-                        </Link>
-                    </div>
+                    <Faculty>
+                        <div>
+                            <button id="wd-add-assignment-group"
+                                    className="btn btn-outline-secondary me-2">
+                                <BsPlus className="fs-2"/>
+                                Group
+                            </button>
+                            <Link to={`/Kanbas/Courses/${cid}/Assignments/New`}
+                                  className="btn btn-lg btn-danger me-1 float-end"
+                            >
+                                <FaPlus className="me-2 fs-5"/> Assignment
+                            </Link>
+                        </div>
+                    </Faculty>
                 </div>
 
                 <div className="wd-bg-color-gray-light p-3 border border-dark">
