@@ -1,9 +1,11 @@
 import { Link } from "react-router-dom";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import Faculty from "./Courses/Faculty";
 import Students from "./Courses/Students";
-import { enrollCourse, unenrollCourse } from "./Courses/Enrollments/reducer";
+import { enrollCourse, unenrollCourse, setEnrollments } from "./Courses/Enrollments/reducer";
+import { fetchAllCourses } from "./Courses/client";
+import * as enrollmentsClient from "./Courses/Enrollments/client";
 
 export default function Dashboard({
                                       courses,
@@ -17,21 +19,59 @@ export default function Dashboard({
     course: any;
     setCourse: (course: any) => void;
     addNewCourse: () => void;
-    deleteCourse: (course: any) => void;
+    deleteCourse: (course: string) => void;
     updateCourse: () => void;
 }) {
     const { currentUser } = useSelector((state: any) => state.accountReducer);
     const { enrollments } = useSelector((state: any) => state.enrollmentsReducer);
     const dispatch = useDispatch();
     const [showAllCourses, setShowAllCourses] = useState(false);
+    const [allCourses, setAllCourses] = useState<any[]>([]);
 
-    const handleEnroll = (courseId: string) => {
-        dispatch(enrollCourse({ userId: currentUser._id, courseId }));
+    useEffect(() => {
+        if (showAllCourses) {
+            fetchAllCourses().then((data) => setAllCourses(data));
+        }
+    }, [showAllCourses]);
+
+    const handleEnroll = async (courseId: string) => {
+        try {
+            await enrollmentsClient.enrollUser({
+                userId: currentUser._id,
+                courseId,
+            });
+            dispatch(enrollCourse({ userId: currentUser._id, courseId }));
+        } catch (error) {
+            console.error("Failed to enroll:", error);
+        }
     };
 
-    const handleUnenroll = (courseId: string) => {
-        dispatch(unenrollCourse({ userId: currentUser._id, courseId }));
+    const handleUnenroll = async (courseId: string) => {
+        try {
+            await enrollmentsClient.unenrollUser({
+                user: currentUser._id,
+                course: courseId,
+            });
+            dispatch(unenrollCourse({ userId: currentUser._id, courseId }));
+        } catch (error) {
+            console.error("Failed to unenroll:", error);
+        }
     };
+
+    const handleDelete = async (event: React.MouseEvent, courseId: string) => {
+        event.preventDefault();
+        await deleteCourse(courseId);
+        // Update allCourses state if we're showing all courses
+        if (showAllCourses) {
+            setAllCourses(allCourses.filter(c => c._id !== courseId));
+        }
+    };
+
+    useEffect(() => {
+        enrollmentsClient.fetchEnrollments(currentUser._id).then((enrollments) => {
+            dispatch(setEnrollments(enrollments));
+        });
+    }, [currentUser._id, dispatch]);
 
     const isEnrolled = (courseId: string) =>
         enrollments.some(
@@ -40,7 +80,7 @@ export default function Dashboard({
         );
 
     const filteredCourses = showAllCourses
-        ? courses
+        ? allCourses
         : courses.filter((course) =>
             enrollments.some(
                 (enrollment: any) =>
@@ -138,9 +178,7 @@ export default function Dashboard({
                                         <Faculty>
                                             <button
                                                 onClick={(event) => {
-                                                    event.preventDefault();
-                                                    deleteCourse(course._id);
-                                                }}
+                                                    handleDelete(event, course._id)}}
                                                 className="btn btn-danger float-end"
                                                 id="wd-delete-course-click"
                                             >

@@ -4,14 +4,34 @@ import Courses from "./Courses";
 import Dashboard from "./Dashboard";
 import KanbasNavigation from "./Navigation";
 import "./styles.css";
-import * as db from "./Database";
+import * as userClient from "./Account/client";
 import { useState } from "react";
-import store from "./store";
-import { Provider } from "react-redux";
 import ProtectedRoute from "./Account/ProtectedRoute";
+import Session from "./Account/Session";
+import { useEffect } from "react";
+import { useSelector } from "react-redux";
+import * as courseClient from "./Courses/client";
+import * as enrollmentsClient from "./Courses/Enrollments/client";
+import { enrollCourse } from "./Courses/Enrollments/reducer";
+import { useDispatch } from "react-redux";
+
 
 export default function Kanbas() {
-    const [courses, setCourses] = useState<any[]>(db.courses);
+    const dispatch = useDispatch();
+    const [courses, setCourses] = useState<any>([]);
+    const { currentUser } = useSelector((state: any) => state.accountReducer);
+    const fetchCourses = async () => {
+        try {
+            const courses = await userClient.findMyCourses();
+            setCourses(courses);
+        } catch (error) {
+            console.error(error);
+        }
+    };
+    useEffect(() => {
+        fetchCourses();
+    }, [currentUser]);
+
     const [course, setCourse] = useState<any>({
         _id: "1234",
         name: "New Course",
@@ -20,18 +40,32 @@ export default function Kanbas() {
         endDate: "2023-12-15",
         description: "New Description",
     });
-    const addNewCourse = () => {
-        setCourses([
-            ...courses,
-            { ...course, _id: new Date().getTime().toString() },
-        ]);
+    const addNewCourse = async () => {
+        try {
+            const newCourse = await userClient.createCourse(course);
+            setCourses([...courses, newCourse]);
+
+            await enrollmentsClient.enrollUser({
+                userId: currentUser._id,
+                courseId: newCourse._id,
+            });
+
+            dispatch(enrollCourse({
+                userId: currentUser._id,
+                courseId: newCourse._id
+            }));
+        } catch (error) {
+            console.error("Failed to create course or enroll:", error);
+        }
     };
-    const deleteCourse = (courseId: any) => {
-        setCourses(courses.filter((course) => course._id !== courseId));
+    const deleteCourse = async (courseId: any) => {
+        await courseClient.deleteCourse(courseId);
+        setCourses(courses.filter((course :any) => course._id !== courseId));
     };
-    const updateCourse = () => {
+    const updateCourse = async () => {
+        await courseClient.updateCourse(course);
         setCourses(
-            courses.map((c) => {
+            courses.map((c: any) => {
                 if (c._id === course._id) {
                     return course;
                 } else {
@@ -42,7 +76,7 @@ export default function Kanbas() {
     };
 
     return (
-        <Provider store={store}>
+        <Session>
             <div id="wd-kanbas">
                 <KanbasNavigation />
                 <div className="wd-main-content-offset p-3">
@@ -78,6 +112,6 @@ export default function Kanbas() {
                     </Routes>
                 </div>
             </div>
-        </Provider>
+        </Session>
     );
 }

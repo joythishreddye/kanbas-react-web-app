@@ -10,6 +10,11 @@ import {FaPlus} from "react-icons/fa6";
 import {Link} from "react-router-dom";
 import {FaTrash} from "react-icons/fa";
 import Faculty from "../Faculty";
+import * as coursesClient from "../client";
+import * as assignmentsClient from "./client";
+import { useEffect } from "react";
+import { setAssignments } from "./reducer";
+import { useCallback } from "react";
 
 export default function Assignments() {
     const {cid} = useParams();
@@ -17,11 +22,22 @@ export default function Assignments() {
     const {assignments} = useSelector((state: any) => state.assignmentsReducer);
     const {currentUser} = useSelector((state: any) => state.accountReducer);
 
-    const handleDelete = (assignmentId: string) => {
+    const handleDelete = async (assignmentId: string) => {
         if (window.confirm("Are you sure you want to remove this assignment?")) {
+            await assignmentsClient.deleteAssignment(assignmentId);
             dispatch(deleteAssignment(assignmentId));
         }
     };
+    const fetchAssignments = useCallback(async () => {
+        const assignments = await coursesClient.findAssignmentsForCourse(
+            cid as string
+        );
+        dispatch(setAssignments(assignments));
+    }, [dispatch, cid]);
+
+    useEffect(() => {
+        fetchAssignments();
+    }, [fetchAssignments]);
 
     return (
         <div id="wd-assignments">
@@ -70,7 +86,7 @@ export default function Assignments() {
                             There are no assignments available for this course.
                         </li>
                     ) : (
-                        assignments.filter((assignment: any) => assignment.course === cid).map((assignment: any) => (
+                        assignments.map((assignment: any) => (
                             <li
                                 key={assignment._id}
                                 className="wd-assignment-list-item list-group-item p-3 ps-2 border-bottom d-flex align-items-start align-items-center"

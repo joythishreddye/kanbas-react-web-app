@@ -6,13 +6,14 @@ import {updateAssignment} from "./reducer";
 import {useNavigate} from "react-router-dom";
 import {useDispatch} from "react-redux";
 import {useState} from "react";
+import * as assignmentsClient from "./client";
 
 export default function AssignmentEditor() {
     const {cid, aid} = useParams();
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const assignments = useSelector((state :any) =>
-        state.assignmentsReducer.assignments.find((a :any) => a._id === aid)
+    const assignments = useSelector((state: any) =>
+        state.assignmentsReducer.assignments.find((a: any) => a._id === aid)
     );
 
     const [assignmentName, setAssignmentName] = useState(assignments.title);
@@ -26,12 +27,10 @@ export default function AssignmentEditor() {
         return <div>Assignment not found</div>;
     }
 
-    const handleSave = () => {
-        dispatch(
-            updateAssignment({_id: aid, title: assignmentName, description, points, dueDate,
-                availableFrom, availableUntil, course: cid,
-            })
-        );
+    const handleSave = async (assignment: any) => {
+        if (!cid) return;
+        await assignmentsClient.updateAssignment(assignment);
+        dispatch(updateAssignment(assignment));
         navigate(`/Kanbas/Courses/${cid}/Assignments`);
     };
 
@@ -39,22 +38,24 @@ export default function AssignmentEditor() {
         <div id="wd-assignments-editor" className="container mt-5" style={{maxWidth: '700px'}}>
             <div className="form-group row mb-3">
                 <label htmlFor="assignment-name">Assignment Name</label>
-                <input type="text" id="assignment-name" className="form-control" value={assignmentName}
-                    onChange={(e) => setAssignmentName(e.target.value)}
+                <input type="text" id="assignment-name" className="form-control"
+                       value={assignmentName}
+                       onChange={(e) => setAssignmentName(e.target.value)}
                 />
             </div>
 
             <div className="form-group row mb-3">
                 <textarea id="wd-description" className="form-control" rows={10} value={description}
-                    onChange={(e) => setDescription(e.target.value)}
+                          onChange={(e) => setDescription(e.target.value)}
                 ></textarea>
             </div>
 
             <div className="form-group row mb-3">
                 <label htmlFor="assignment-points" className="col-md-3">Points</label>
                 <div className="col-md-9">
-                    <input type="number" id="assignment-points" className="form-control" value={points}
-                        onChange={(e) => setPoints(Number(e.target.value))}
+                    <input type="number" id="assignment-points" className="form-control"
+                           value={points}
+                           onChange={(e) => setPoints(Number(e.target.value))}
                     />
                 </div>
             </div>
@@ -96,19 +97,22 @@ export default function AssignmentEditor() {
                             </label>
                         </div>
                         <div className="form-check">
-                            <input type="checkbox" id="website-url" className="form-check-input" defaultChecked/>
+                            <input type="checkbox" id="website-url" className="form-check-input"
+                                   defaultChecked/>
                             <label htmlFor="website-url" className="form-check-label">
                                 Website URL
                             </label>
                         </div>
                         <div className="form-check">
-                            <input type="checkbox" id="media-recordings" className="form-check-input"/>
+                            <input type="checkbox" id="media-recordings"
+                                   className="form-check-input"/>
                             <label htmlFor="media-recordings" className="form-check-label">
                                 Media Recordings
                             </label>
                         </div>
                         <div className="form-check">
-                            <input type="checkbox" id="student-annotations" className="form-check-input"
+                            <input type="checkbox" id="student-annotations"
+                                   className="form-check-input"
                             />
                             <label htmlFor="student-annotations" className="form-check-label">
                                 Student Annotations
@@ -138,8 +142,9 @@ export default function AssignmentEditor() {
                     <div className="row mb-3">
                         <div className="col-md-12">
                             <label htmlFor="due-date" className="fw-bold">Due</label>
-                            <input id="due-date" type="date" className="form-control" value={dueDate}
-                                onChange={(e) => setDueDate(e.target.value)}
+                            <input id="due-date" type="date" className="form-control"
+                                   value={dueDate}
+                                   onChange={(e) => setDueDate(e.target.value)}
                             />
                         </div>
                     </div>
@@ -147,15 +152,17 @@ export default function AssignmentEditor() {
                         <div className="col-md-6">
                             <label htmlFor="available-from" className="fw-bold">Available
                                 from</label>
-                            <input id="available-from" type="date" className="form-control" value={availableFrom}
-                                onChange={(e) => setAvailableFrom(e.target.value)}
+                            <input id="available-from" type="date" className="form-control"
+                                   value={availableFrom}
+                                   onChange={(e) => setAvailableFrom(e.target.value)}
                             />
                         </div>
                         <div className="col-md-6">
                             <label htmlFor="available-until" className="fw-bold">Available
                                 until</label>
-                            <input id="available-until" type="date" className="form-control" value={availableUntil}
-                                onChange={(e) => setAvailableUntil(e.target.value)}
+                            <input id="available-until" type="date" className="form-control"
+                                   value={availableUntil}
+                                   onChange={(e) => setAvailableUntil(e.target.value)}
                             />
                         </div>
                     </div>
@@ -168,7 +175,15 @@ export default function AssignmentEditor() {
                     Cancel
                 </Link>
 
-                <button type="button" className="btn btn-danger" onClick={handleSave}>
+                <button type="button" className="btn btn-danger" onClick={() => handleSave({
+                    _id: aid,
+                    title: assignmentName,
+                    description,
+                    points,
+                    dueDate,
+                    availableFrom,
+                    availableUntil
+                })}>
                     Save
                 </button>
             </div>
