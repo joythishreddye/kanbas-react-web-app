@@ -7,11 +7,27 @@ import AssignmentEditor from "./Assignments/Editor";
 import {FaAlignJustify} from "react-icons/fa";
 import PeopleTable from "./People/Table";
 import AddAssignment from "./Assignments/AddAssignment";
+import { useState, useEffect } from "react";
+import { findUsersForCourse } from "./client";
 
 export default function Courses({courses}: { courses: any[] }) {
     const {cid} = useParams();
     const course = courses.find((course) => course._id === cid);
     const {pathname} = useLocation();
+    const [users, setUsers] = useState<any[]>([]);
+
+    useEffect(() => {
+        const fetchUsers = async () => {
+            if (cid) {
+                const users = await findUsersForCourse(cid);
+                setUsers(users);
+            }
+        };
+        if (cid) {
+            fetchUsers();
+        }
+    }, [cid, users]);
+
     return (
         <div id="wd-courses">
             <h2 className="text-danger">
@@ -31,7 +47,7 @@ export default function Courses({courses}: { courses: any[] }) {
                         <Route path="Assignments" element={<Assignments/>}/>
                         <Route path="Assignments/New" element={<AddAssignment/>}/>
                         <Route path="Assignments/:aid" element={<AssignmentEditor/>}/>
-                        <Route path="People" element={<PeopleTable/>}/>
+                        <Route path="People" element={<PeopleTable users={users} />} />
                     </Routes>
                 </div>
             </div>

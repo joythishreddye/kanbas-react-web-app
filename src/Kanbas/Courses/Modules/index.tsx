@@ -14,23 +14,27 @@ export default function Modules() {
     const {cid} = useParams();
     const [moduleName, setModuleName] = useState("");
     const {modules} = useSelector((state: any) => state.modulesReducer);
+    const dispatch = useDispatch();
+
     const removeModule = async (moduleId: string) => {
         await modulesClient.deleteModule(moduleId);
         dispatch(deleteModule(moduleId));
+        fetchModules();
     };
-    const dispatch = useDispatch();
+
     const createModuleForCourse = async () => {
         if (!cid) return;
         const newModule = { name: moduleName, course: cid };
         const module = await coursesClient.createModuleForCourse(cid, newModule);
         dispatch(addModule(module));
+        fetchModules();
     };
+
     const saveModule = async (module: any) => {
         await modulesClient.updateModule(module);
         dispatch(updateModule(module));
+        fetchModules();
     };
-
-
 
     const fetchModules = useCallback(async () => {
         const modules = await coursesClient.findModulesForCourse(cid as string);
@@ -40,6 +44,7 @@ export default function Modules() {
     useEffect(() => {
         fetchModules();
     }, [fetchModules]);
+
     return (
         <div>
             <ul id="wd-modules" className="list-group rounded-0">

@@ -1,28 +1,28 @@
-import { Routes, Route, Navigate } from "react-router";
+import {Routes, Route, Navigate} from "react-router";
 import Account from "./Account";
 import Courses from "./Courses";
 import Dashboard from "./Dashboard";
 import KanbasNavigation from "./Navigation";
 import "./styles.css";
-import * as userClient from "./Account/client";
-import { useState } from "react";
+import {useState} from "react";
 import ProtectedRoute from "./Account/ProtectedRoute";
 import Session from "./Account/Session";
-import { useEffect } from "react";
-import { useSelector } from "react-redux";
+import {useEffect} from "react";
+import {useSelector} from "react-redux";
 import * as courseClient from "./Courses/client";
 import * as enrollmentsClient from "./Courses/Enrollments/client";
-import { enrollCourse } from "./Courses/Enrollments/reducer";
-import { useDispatch } from "react-redux";
+import {enrollCourse} from "./Courses/Enrollments/reducer";
+import {useDispatch} from "react-redux";
 
 
 export default function Kanbas() {
     const dispatch = useDispatch();
     const [courses, setCourses] = useState<any>([]);
-    const { currentUser } = useSelector((state: any) => state.accountReducer);
+    const {currentUser} = useSelector((state: any) => state.accountReducer);
+
     const fetchCourses = async () => {
         try {
-            const courses = await userClient.findMyCourses();
+            const courses = await courseClient.fetchAllCourses();
             setCourses(courses);
         } catch (error) {
             console.error(error);
@@ -40,9 +40,10 @@ export default function Kanbas() {
         endDate: "2023-12-15",
         description: "New Description",
     });
+
     const addNewCourse = async () => {
         try {
-            const newCourse = await userClient.createCourse(course);
+            const newCourse = await courseClient.createCourse(course);
             setCourses([...courses, newCourse]);
 
             await enrollmentsClient.enrollUser({
@@ -58,31 +59,42 @@ export default function Kanbas() {
             console.error("Failed to create course or enroll:", error);
         }
     };
+
     const deleteCourse = async (courseId: any) => {
         await courseClient.deleteCourse(courseId);
-        setCourses(courses.filter((course :any) => course._id !== courseId));
+        setCourses(courses.filter((course: any) => course._id !== courseId));
     };
+
     const updateCourse = async () => {
-        await courseClient.updateCourse(course);
-        setCourses(
-            courses.map((c: any) => {
-                if (c._id === course._id) {
-                    return course;
-                } else {
-                    return c;
-                }
-            })
-        );
+        if (!course || !course._id) {
+            alert("Please select a course to update.");
+            return;
+        }
+        try {
+            await courseClient.updateCourse(course);
+            setCourses(
+                courses.map((c: any) => {
+                    if (c._id === course._id) {
+                        return course;
+                    } else {
+                        return c;
+                    }
+                })
+            );
+        } catch (error) {
+            console.error("Failed to update course:", error);
+            alert("Failed to update course.");
+        }
     };
 
     return (
         <Session>
             <div id="wd-kanbas">
-                <KanbasNavigation />
+                <KanbasNavigation/>
                 <div className="wd-main-content-offset p-3">
                     <Routes>
-                        <Route path="/" element={<Navigate to="Account" />} />
-                        <Route path="/Account/*" element={<Account />} />
+                        <Route path="/" element={<Navigate to="Account"/>}/>
+                        <Route path="/Account/*" element={<Account/>}/>
                         <Route
                             path="/Dashboard"
                             element={
@@ -103,12 +115,12 @@ export default function Kanbas() {
                             element={
                                 <ProtectedRoute>
                                     {" "}
-                                    <Courses courses={courses} />
+                                    <Courses courses={courses}/>
                                 </ProtectedRoute>
                             }
                         />
-                        <Route path="/Calendar" element={<h1>Calendar</h1>} />
-                        <Route path="/Inbox" element={<h1>Inbox</h1>} />
+                        <Route path="/Calendar" element={<h1>Calendar</h1>}/>
+                        <Route path="/Inbox" element={<h1>Inbox</h1>}/>
                     </Routes>
                 </div>
             </div>
