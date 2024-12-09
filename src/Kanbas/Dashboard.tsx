@@ -1,10 +1,10 @@
-import { Link } from "react-router-dom";
-import React, { useState, useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import {Link} from "react-router-dom";
+import React, {useState, useEffect} from "react";
+import {useSelector, useDispatch} from "react-redux";
 import Faculty from "./Courses/Faculty";
 import Students from "./Courses/Students";
-import { enrollCourse, unenrollCourse, setEnrollments } from "./Courses/Enrollments/reducer";
-import { fetchAllCourses } from "./Courses/client";
+import {enrollCourse, unenrollCourse, setEnrollments} from "./Courses/Enrollments/reducer";
+import {fetchAllCourses} from "./Courses/client";
 import * as enrollmentsClient from "./Courses/Enrollments/client";
 
 export default function Dashboard({
@@ -22,8 +22,8 @@ export default function Dashboard({
     deleteCourse: (course: string) => void;
     updateCourse: () => void;
 }) {
-    const { currentUser } = useSelector((state: any) => state.accountReducer);
-    const { enrollments } = useSelector((state: any) => state.enrollmentsReducer);
+    const {currentUser} = useSelector((state: any) => state.accountReducer);
+    const {enrollments} = useSelector((state: any) => state.enrollmentsReducer);
     const dispatch = useDispatch();
     const [showAllCourses, setShowAllCourses] = useState(false);
     const [allCourses, setAllCourses] = useState<any[]>([]);
@@ -40,7 +40,7 @@ export default function Dashboard({
                 userId: currentUser._id,
                 courseId,
             });
-            dispatch(enrollCourse({ userId: currentUser._id, courseId }));
+            dispatch(enrollCourse({userId: currentUser._id, courseId}));
         } catch (error) {
             console.error("Failed to enroll:", error);
         }
@@ -52,7 +52,7 @@ export default function Dashboard({
                 user: currentUser._id,
                 course: courseId,
             });
-            dispatch(unenrollCourse({ userId: currentUser._id, courseId }));
+            dispatch(unenrollCourse({userId: currentUser._id, courseId}));
         } catch (error) {
             console.error("Failed to unenroll:", error);
         }
@@ -73,7 +73,7 @@ export default function Dashboard({
             console.error("No course selected to update");
             alert("Please select a course to update.");
             return;
-        }else{
+        } else {
             updateCourse();
         }
         if (showAllCourses) {
@@ -110,21 +110,22 @@ export default function Dashboard({
 
     return (
         <div id="wd-dashboard">
-            <h1 id="wd-dashboard-title">Dashboard</h1> <hr />
-            <Students>
-                <h5>
-                    Enrollments
-                    <button
-                        className="btn btn-primary float-end"
-                        id="wd-enrollments-course-click"
-                        onClick={() => setShowAllCourses(!showAllCourses)}
-                    >
-                        {showAllCourses ? "Show Enrolled Courses" : "Show All Courses"}
-                    </button>
-                </h5>
-                <br />
-            </Students>
-            <hr />
+            <h1 id="wd-dashboard-title">Dashboard</h1>
+            <hr/>
+            {/*<Students>*/}
+            <h5>
+                Enrollments
+                <button
+                    className="btn btn-primary float-end"
+                    id="wd-enrollments-course-click"
+                    onClick={() => setShowAllCourses(!showAllCourses)}
+                >
+                    {showAllCourses ? "Show Enrolled Courses" : "Show All Courses"}
+                </button>
+            </h5>
+            <br/>
+            {/*</Students>*/}
+            <hr/>
             <Faculty>
                 <h5>
                     New Course
@@ -139,35 +140,35 @@ export default function Dashboard({
                     <button
                         className="btn btn-warning float-end me-2"
                         id="wd-update-course-click"
-                        onClick={(event) => handleUpdate(event,course._id)}
+                        onClick={(event) => handleUpdate(event, course._id)}
                     >
                         Update
                     </button>
                 </h5>
 
-                <br />
+                <br/>
                 <input
                     value={course.name}
                     className="form-control mb-2"
-                    onChange={(e) => setCourse({ ...course, name: e.target.value })}
+                    onChange={(e) => setCourse({...course, name: e.target.value})}
                 />
                 <textarea
                     value={course.description}
                     className="form-control"
                     onChange={(e) =>
-                        setCourse({ ...course, description: e.target.value })
+                        setCourse({...course, description: e.target.value})
                     }
                 />
             </Faculty>
-            <hr />
+            <hr/>
             <h2 id="wd-dashboard-published">
                 Published Courses ({filteredCourses.length})
             </h2>{" "}
-            <hr />
+            <hr/>
             <div id="wd-dashboard-courses" className="row">
                 <div className="row row-cols-1 row-cols-md-5 g-4">
                     {filteredCourses.map((course) => (
-                        <div key={course._id} className="col" style={{ width: "300px" }}>
+                        <div key={course._id} className="col" style={{width: "300px"}}>
                             <div className="card">
                                 <Link
                                     to={`/Kanbas/Courses/${course._id}/Home`}
@@ -188,16 +189,17 @@ export default function Dashboard({
                                         </h5>
                                         <p
                                             className="wd-dashboard-course-title card-text overflow-y-hidden"
-                                            style={{ maxHeight: 100 }}
+                                            style={{maxHeight: 100}}
                                         >
                                             {course.description}{" "}
                                         </p>
-                                        <button className="btn btn-primary"> Go </button>
+                                        <button className="btn btn-primary"> Go</button>
 
                                         <Faculty>
                                             <button
                                                 onClick={(event) => {
-                                                    handleDelete(event, course._id)}}
+                                                    handleDelete(event, course._id)
+                                                }}
                                                 className="btn btn-danger float-end"
                                                 id="wd-delete-course-click"
                                             >
@@ -217,14 +219,15 @@ export default function Dashboard({
                                         </Faculty>
 
                                         {showAllCourses && (
-                                            <Students>
+                                            <div>
+                                                {/*<Students>*/}
                                                 {isEnrolled(course._id) ? (
                                                     <button
                                                         onClick={(event) => {
                                                             event.preventDefault();
                                                             handleUnenroll(course._id);
                                                         }}
-                                                        className="btn btn-danger float-end"
+                                                        className="btn btn-danger float-end mt-1 mb-1"
                                                         id="wd-unenroll-course-click"
                                                     >
                                                         Unenroll
@@ -235,13 +238,14 @@ export default function Dashboard({
                                                             event.preventDefault();
                                                             handleEnroll(course._id);
                                                         }}
-                                                        className="btn btn-success me-2 float-end"
+                                                        className="btn btn-success float-end mt-1 mb-1"
                                                         id="wd-enroll-course-click"
                                                     >
                                                         Enroll
                                                     </button>
                                                 )}
-                                            </Students>
+                                                {/*</Students>*/}
+                                            </div>
                                         )}
                                     </div>
                                 </Link>
