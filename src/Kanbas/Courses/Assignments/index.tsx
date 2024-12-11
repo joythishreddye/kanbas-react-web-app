@@ -12,13 +12,22 @@ import {FaTrash} from "react-icons/fa";
 import Faculty from "../Faculty";
 import * as coursesClient from "../client";
 import * as assignmentsClient from "./client";
-import { useEffect } from "react";
-import { setAssignments } from "./reducer";
-import { useCallback } from "react";
+import {useEffect} from "react";
+import {setAssignments} from "./reducer";
+import {useCallback} from "react";
 
 export default function Assignments() {
     const {cid} = useParams();
     const dispatch = useDispatch();
+
+    const formatDate = (dateString: string) => {
+        const date = new Date(dateString);
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        return `${month}-${day}-${year}`;
+    };
+
     const {assignments} = useSelector((state: any) => state.assignmentsReducer);
     const {currentUser} = useSelector((state: any) => state.accountReducer);
 
@@ -126,10 +135,10 @@ export default function Assignments() {
                                     <p>
                                         <span className="red">Multiple Modules</span> |{" "}
                                         <strong>Not available until</strong>{" "}
-                                        {assignment.availableFrom}
+                                        {formatDate(assignment.availableFrom)}
                                     </p>
                                     <p>
-                                        <strong>Due</strong> {assignment.availableUntil} | {assignment.points} pts
+                                        <strong>Due</strong> {formatDate(assignment.availableUntil)} | {assignment.points} pts
                                     </p>
                                 </div>
                             </li>

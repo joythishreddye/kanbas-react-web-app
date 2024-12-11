@@ -55,3 +55,17 @@ export const createAssignment = async (courseId: string, assignment: any) => {
     );
     return response.data;
 };
+
+export const findQuizForCourse = async (courseId: string) => {
+    const response = await axios
+        .get(`${COURSES_API}/${courseId}/quizzes`);
+    return response.data;
+};
+
+export const createQuizForCourse = async (courseId: string, quiz: any) => {
+    const response = await axios.post(
+        `${COURSES_API}/${courseId}/quizzes`,
+        quiz
+    );
+    return response.data;
+};
